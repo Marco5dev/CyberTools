@@ -12,18 +12,23 @@ jobs:
     permissions:
       contents: read #This is required for actions/checkout
 
+    strategy:
+      matrix:
+        node-version: [v22.13.1]
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: '22.x'
+          node-version: ${{ matrix.node-version }}
+          ache: "bun" # Changed from npm to bun
 
-      - name: npm install, and build
+      - name: bun install, and build
         run: |
-          npm install
-          npm run build --if-present
+          bun install
+          bun run build
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -38,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
@@ -52,7 +57,7 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -60,11 +65,10 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F6DDD1488A524BE0BC46B3BADDD94F28 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_3B444BDC7DBF4D6F968D39CFCD2CA6CB }}
 
-      - name: 'Deploy to Azure Web App'
+      - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'cybertools'
-          slot-name: 'Production'
+          app-name: "cybertools"
+          slot-name: "Production"
           package: .
-          
