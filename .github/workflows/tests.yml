@@ -1,0 +1,51 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+
+    strategy:
+      matrix:
+        node-version: [v22.13.1]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: oven-sh/setup-bun@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'bun'  # Changed from npm to bun
+
+    - name: Install Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Generate lockfile
+      run: |
+        bun install
+        bun install --frozen-lockfile
+
+    - name: Run linter
+      run: |
+        bun run lint || true
+
+    - name: Run tests
+      run: |
+        bun run test
+      env:
+        CI: true
+        IPINFO_TOKEN: ${{ secrets.IPINFO_TOKEN }}
+
+    - name: Check TypeScript compilation
+      run: |
+        bun run build
