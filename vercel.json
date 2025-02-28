@@ -11,10 +11,5 @@
       "src": "/(.*)",
       "dest": "dist/src/index.js"
     }
-  ],
-  "functions": {
-    "dist/src/index.js": {
-      "memory": 1024
-    }
-  }
+  ]
 }
