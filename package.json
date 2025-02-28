@@ -10,7 +10,9 @@
     "start:dist": "node dist/src/index.js",
     "lint": "eslint --fix src test",
     "test": "bun test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "vercel-build": "npm install",
+    "deploy": "vercel --prod"
   },
   "keywords": [],
   "author": "Mark Maher Marco5dev <contact@marco5dev.me> (https://marco5dev.me)",
