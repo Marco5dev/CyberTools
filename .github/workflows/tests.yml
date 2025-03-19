@@ -35,6 +35,12 @@ jobs:
         bun install
         bun install --frozen-lockfile
 
+    - name: Install test type definitions
+      run: |
+        bun add -d @types/jest @types/mocha
+        # Install test frameworks if not already in package.json
+        bun add -d jest ts-jest mocha ts-mocha
+
     - name: Run linter
       run: |
         bun run lint || true
