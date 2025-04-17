@@ -4,15 +4,13 @@
   "description": "A collection of web development tools",
   "main": "dist/src/app.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start:ts": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
-    "start:dist": "node dist/src/index.js",
+    "start": "node dist/src/index.js",
     "lint": "eslint --fix src test",
     "test": "bun test",
-    "typecheck": "tsc --noEmit",
-    "vercel-build": "npm install",
-    "deploy": "vercel --prod"
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Mark Maher Marco5dev <contact@marco5dev.me> (https://marco5dev.me)",
